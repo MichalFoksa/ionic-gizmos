@@ -7575,6 +7575,9 @@ ionic.scroll = {
   var ITEM_PLACEHOLDER_CLASS = 'item-placeholder';
   var ITEM_REORDERING_CLASS = 'item-reordering';
   var ITEM_REORDER_BTN_CLASS = 'item-reorder';
+  // [NEW - enable left/right swipe]
+  // direction-right is selector of left to right swipe-able container.
+  var DIRECTION_RIGHT_CLASS = 'direction-right';
 
   var DragOp = function() {};
   DragOp.prototype = {
@@ -7622,7 +7625,16 @@ ionic.scroll = {
     offsetX = parseFloat(content.style[ionic.CSS.TRANSFORM].replace('translate3d(', '').split(',')[0]) || 0;
 
     // Grab the buttons
-    buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS);
+    // [Ionic 1.3.1]
+    // buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS);
+    // [NEW - enable left/right swipe]
+    if (e.gesture.direction === "left"){
+        // Contains item-options and does not contain direction-right classes
+        buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS + ':not(.' + DIRECTION_RIGHT_CLASS +')');
+    } if (e.gesture.direction === "right"){
+        // Contains item-options and direction-right classes.
+        buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS + '.' + DIRECTION_RIGHT_CLASS);
+    }
     if (!buttons) {
       return;
     }
@@ -7634,7 +7646,10 @@ ionic.scroll = {
       buttons: buttons,
       buttonsWidth: buttonsWidth,
       content: content,
-      startOffsetX: offsetX
+      startOffsetX: offsetX,
+      // [NEW - enable left/right swipe]
+      // store direction swipe started with.
+      direction: e.gesture.direction
     };
   };
 
@@ -7691,7 +7706,16 @@ ionic.scroll = {
       buttonsWidth = this._currentDrag.buttonsWidth;
 
       // Grab the new X point, capping it at zero
-      var newX = Math.min(0, this._currentDrag.startOffsetX + e.gesture.deltaX);
+      // [Ionic 1.3.1]
+      // var newX = Math.min(0, this._currentDrag.startOffsetX + e.gesture.deltaX);
+      // [NEW - enable left/right swipe]
+      // Do not allow swipe past edge of view where swipe started.
+      var newX;
+      if (this._currentDrag.direction === "left"){
+          newX = Math.min(0, this._currentDrag.startOffsetX + e.gesture.deltaX);
+      } else if (this._currentDrag.direction === "right"){
+          newX = Math.max(0, this._currentDrag.startOffsetX + e.gesture.deltaX);
+      }
 
       // If the new X position is past the buttons, we need to slow down the drag (rubber band style)
       if (newX < -buttonsWidth) {
@@ -7717,7 +7741,16 @@ ionic.scroll = {
 
     // If we are currently dragging, we want to snap back into place
     // The final resting point X will be the width of the exposed buttons
-    var restingPoint = -self._currentDrag.buttonsWidth;
+    // [Ionic 1.3.1]
+    // var restingPoint = -self._currentDrag.buttonsWidth;
+    // [NEW - enable left/right swipe]
+    // Resting point X depends on swipe direction.
+    var restingPoint;
+    if (e.gesture.direction === "left"){
+        restingPoint = -self._currentDrag.buttonsWidth;
+    } else if (e.gesture.direction === "right"){
+        restingPoint = self._currentDrag.buttonsWidth;
+    }
 
     // Check if the drag didn't clear the buttons mid-point
     // and we aren't moving fast enough to swipe open
@@ -7726,8 +7759,10 @@ ionic.scroll = {
       // If we are going left but too slow, or going right, go back to resting
       if (e.gesture.direction == "left" && Math.abs(e.gesture.velocityX) < 0.3) {
         restingPoint = 0;
-
-      } else if (e.gesture.direction == "right") {
+      // [Ionic 1.3.1]
+      // } else if (e.gesture.direction == "right") {
+      // [NEW - enable left/right swipe]
+      } else if (e.gesture.direction == "right" && Math.abs(e.gesture.velocityX) < 0.3) {
         restingPoint = 0;
       }
 
@@ -64047,7 +64082,11 @@ IonicModule
                      isDefined($attrs.uiSref);
       var isComplexItem = isAnchor ||
         //Lame way of testing, but we have to know at compile what to do with the element
-        /ion-(delete|option|reorder)-button/i.test($element.html());
+        // [Ionic 1.3.1]
+        // /ion-(delete|option|reorder)-button/i.test($element.html());
+        // [NEW - enable left/right swipe]
+        // presence of item-swipe-pane makes the ion-item complex too.
+        /ion-(delete|option|reorder)-button|item-swipe-pane/i.test($element.html());
 
       if (isComplexItem) {
         var innerElement = jqLite(isAnchor ? '<a></a>' : '<div></div>');
