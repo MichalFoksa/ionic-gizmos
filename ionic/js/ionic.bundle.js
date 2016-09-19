@@ -7628,12 +7628,26 @@ ionic.scroll = {
     // [Ionic 1.3.1]
     // buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS);
     // [NEW - enable left/right swipe]
-    if (e.gesture.direction === "left"){
+    // Grab correct pane.
+    // Starting drag from zero and going to the left (opening a pane on right
+    // side), or starting drag on left side (offsetX < 0) and going to the
+    // right (closing the pane on the right side). Grab the pane on the right
+    // side - obviously.
+    if( (e.gesture.direction === "left"  && offsetX === 0) ||
+        (e.gesture.direction === "right" && offsetX < 0) ) {
         // Contains item-options and does not contain direction-right classes
-        buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS + ':not(.' + DIRECTION_RIGHT_CLASS +')');
-    } if (e.gesture.direction === "right"){
+        buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS
+                + ':not(.' + DIRECTION_RIGHT_CLASS +')');
+
+    // Starting drag from zero and going to the right (opening a pane on left
+    // side), or starting drag on right side (offsetX > 0) and going to the
+    // left (closing the pane on the leftt side). Grab the pane on the left
+    // side.
+    } else if ( (e.gesture.direction === "right" && offsetX === 0) ||
+                (e.gesture.direction === "left"  && offsetX > 0) ) {
         // Contains item-options and direction-right classes.
-        buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS + '.' + DIRECTION_RIGHT_CLASS);
+        buttons = content.parentNode.querySelector('.' + ITEM_OPTIONS_CLASS
+                + '.' + DIRECTION_RIGHT_CLASS);
     }
     if (!buttons) {
       return;
@@ -7709,12 +7723,15 @@ ionic.scroll = {
       // [Ionic 1.3.1]
       // var newX = Math.min(0, this._currentDrag.startOffsetX + e.gesture.deltaX);
       // [NEW - enable left/right swipe]
-      // Do not allow swipe past edge of view where swipe started.
+      // Prevent drag from open position on one side to open position on other
+      // side.
       var newX;
       if (this._currentDrag.direction === "left"){
-          newX = Math.min(0, this._currentDrag.startOffsetX + e.gesture.deltaX);
+          newX = Math.min(0, this._currentDrag.startOffsetX > 0 ? this._currentDrag.startOffsetX :
+                  (this._currentDrag.startOffsetX + e.gesture.deltaX) );
       } else if (this._currentDrag.direction === "right"){
-          newX = Math.max(0, this._currentDrag.startOffsetX + e.gesture.deltaX);
+          newX = Math.max(0, this._currentDrag.startOffsetX < 0 ? this._currentDrag.startOffsetX :
+                  (this._currentDrag.startOffsetX + e.gesture.deltaX) );
       }
 
       // If the new X position is past the buttons, we need to slow down the drag (rubber band style)
@@ -7746,10 +7763,21 @@ ionic.scroll = {
     // [NEW - enable left/right swipe]
     // Resting point X depends on swipe direction.
     var restingPoint;
+    // If pane was opened (startOffsetX > 0 or startOffsetX < 0), snap back to
+    // zero (close the pane). Otherwie resting point X is the width of the
+    // exposed pane.
     if (e.gesture.direction === "left"){
-        restingPoint = -self._currentDrag.buttonsWidth;
+        if (this._currentDrag.startOffsetX > 0){
+            restingPoint = 0;
+        } else {
+            restingPoint = -self._currentDrag.buttonsWidth;
+        }
     } else if (e.gesture.direction === "right"){
-        restingPoint = self._currentDrag.buttonsWidth;
+        if (this._currentDrag.startOffsetX < 0){
+            restingPoint = 0;
+        } else {
+            restingPoint = self._currentDrag.buttonsWidth;
+        }
     }
 
     // Check if the drag didn't clear the buttons mid-point
