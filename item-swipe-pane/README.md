@@ -37,6 +37,6 @@ More [item-swipe-pane examples](http://codepen.io/MichalFoksa/pen/qaNKdP) are on
 
 Unfortunately `Ionic Framework` does not allow right swipe (from left to right) of a list item, so I had to make few modifications to the `Ionic` library. As a base I used Ionic 1.3.1.
  - [Modified Ionic 1.3.1 framework](https://github.com/MichalFoksa/ionic-gizmos/tree/master/ionic).
- - [Summary of modifications][1].  
+ - [Summary of modifications in Ionic][1].
 
-  [1]: https://github.com/MichalFoksa/ionic-gizmos/commit/6443181f36a770fb4308b11d8a1646f990df88b0
+  [1]: https://github.com/MichalFoksa/ionic-gizmos/compare/1d6d2be3ff309bb72347805e4bf0d18b47be2bef...c6e4e3d9b077090643845691a393840756ff6f64#diff-87609cead09086a19f67299e0a41effc
