@@ -8,8 +8,8 @@ var module = angular.module('itemSwipePaneDirective', []);
 /**************************    DIRECTIVE    **********************************/
 /*****************************************************************************/
 /***
- * item-swipe-pane creates container inside a list item, that is visible when
- * the item is swiped to the left or right by the user.
+ * item-swipe-pane creates container inside a ion-item, which is visible when
+ * the item is swiped to the left or to the right.
  * Attribute "direction" controls swipe direction. Possible values are left or
  * right. Default direction is left.
  *
@@ -36,10 +36,7 @@ var module = angular.module('itemSwipePaneDirective', []);
  *     <item-swipe-pane direction="right"> and <ion-option-button> 
  *   is OK.
  */
-/***
- * 
- */
-var ITEM_SWIPE_PANE_TPL = '<div class="item-options invisible"></div>';
+var ITEM_SWIPE_PANE_TPL = '<div class="item-options invisible item-swipe-pane"></div>';
 var DIRECTION_RIGHT_CLASS = 'direction-right';
 module.directive( 'itemSwipePane' , function() {
     return {
@@ -55,19 +52,22 @@ module.directive( 'itemSwipePane' , function() {
                 direction = 'left';
             }
 
-            if (direction === 'left' && !itemCtrl.itemSwipeLeft){
-                itemCtrl.itemSwipeLeft = angular.element(ITEM_SWIPE_PANE_TPL);
-                itemCtrl.$element.append(itemCtrl.itemSwipeLeft);
+            if (direction === 'left'){
+                if (!itemCtrl.itemSwipeLeft){
+                    itemCtrl.itemSwipeLeft = angular.element(ITEM_SWIPE_PANE_TPL);
+                    itemCtrl.$element.append(itemCtrl.itemSwipeLeft);
+                }
                 container = itemCtrl.itemSwipeLeft;
-
-            } else if (direction === 'right' && !itemCtrl.itemSwipeRight){
-                itemCtrl.itemSwipeRight = angular.element(ITEM_SWIPE_PANE_TPL);
-                // If direction is right, move position of item options
-                // to the left - override inherited right:0; 
-                itemCtrl.itemSwipeRight.css({right: 'auto'});
-                // "direction-right" is container selector. 
-                itemCtrl.itemSwipeRight.addClass(DIRECTION_RIGHT_CLASS);
-                itemCtrl.$element.append(itemCtrl.itemSwipeRight);
+            } else if (direction === 'right'){
+                if (!itemCtrl.itemSwipeRight){
+                    itemCtrl.itemSwipeRight = angular.element(ITEM_SWIPE_PANE_TPL);
+                    // If direction is right, move position of item options
+                    // to the left - override inherited right:0; 
+                    itemCtrl.itemSwipeRight.css({right: 'auto'});
+                    // "direction-right" is container selector. 
+                    itemCtrl.itemSwipeRight.addClass(DIRECTION_RIGHT_CLASS);
+                    itemCtrl.$element.append(itemCtrl.itemSwipeRight);
+                }
                 container = itemCtrl.itemSwipeRight;
             }
 
