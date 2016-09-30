@@ -8,20 +8,17 @@ var module = angular.module('canSwipeDirective', []);
 /**************************    DIRECTIVE    **********************************/
 /*****************************************************************************/
 /***
- * can-swipe is an attribute directive which will cause an ion-item element .... TODO
- * to hide when keyboard shows.
- * the item is swiped to the left or to the right.
- * Attribute "direction" controls swipe direction. Possible values are left or
- * right. Default direction is left.
+ * can-swipe is an attribute directive which can disable swipe of an ion-item
+ * element.
+ * Attribute possible values are true or false.
  *
  * @usage
  *
  * ```html
- *   <ion-item>
- *     <item-swipe-pane direction="right">
- *       <button class="button icon ion-arrow-right-c"></button>
- *       Right swipe
- *     </item-swipe-pane>
+ *   <ion-item can-swipe="false">
+ *     <ion-option-button class="button-assertive" ng-click="edit(item)">
+ *       Edit
+ *     </ion-option-button>
  *   </ion-item>
  * ```
  *
