@@ -31,6 +31,8 @@ Example with two item-swipe-panes, one is on the left and one on the right:
       </item-swipe-pane>
     </ion-item>
 
+![alt text](https://raw.githubusercontent.com/MichalFoksa/ionic-gizmos/master/img/item-swipe-pane-example1.gif "item-swipe-pane examples")
+
 More [item-swipe-pane examples](http://codepen.io/MichalFoksa/pen/qaNKdP) are on Codepen.
 
 ## Important note
