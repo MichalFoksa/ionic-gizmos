@@ -8,9 +8,9 @@ var module = angular.module('canSwipeDirective', []);
 /**************************    DIRECTIVE    **********************************/
 /*****************************************************************************/
 /***
- * can-swipe is an attribute directive which can disable swipe of an ion-item
- * element.
- * Attribute possible values are true or false.
+ * can-swipe is an attribute directive which can enable/disable swipe
+ * functionality of an individual ion-item element.
+ * Possible attribute values are true or false.
  *
  * @usage
  *
