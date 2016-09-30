@@ -1,6 +1,6 @@
 # can-swipe
 
-`can-swipe` is an attribute directive which can enable/disable swipe functionality of an individual ion-item element. Attribute possible values are true or false.
+`can-swipe` is an attribute directive which can enable/disable swipe functionality of an individual `ion-item` element. Attribute possible values are true or false.
 
 ## Examples
 
