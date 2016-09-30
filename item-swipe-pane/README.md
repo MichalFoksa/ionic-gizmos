@@ -41,4 +41,9 @@ Unfortunately `Ionic Framework` does not allow right swipe (from left to right) 
  - [Modified Ionic 1.3.1 framework](https://github.com/MichalFoksa/ionic-gizmos/tree/master/ionic).
  - [Summary of modifications in Ionic][1].
 
+## Like it?
+
+Give it a vote on [StackOverflow][2].
+
   [1]: https://github.com/MichalFoksa/ionic-gizmos/compare/1d6d2be3ff309bb72347805e4bf0d18b47be2bef...c6e4e3d9b077090643845691a393840756ff6f64#diff-87609cead09086a19f67299e0a41effc
+  [2]: http://stackoverflow.com/questions/31153543/ionic-how-to-swipe-from-left-to-right-ionic-list-item/39545812#39545812
